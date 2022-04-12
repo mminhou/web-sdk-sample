@@ -27,7 +27,8 @@ class PenHelper {
   handleDot = (controller, args) => {
     let mac = controller.info.MacAddress
     this.mac = mac
-    let dot = args.Dot;
+    let dot = args;
+    console.log(args) // 기존에 args.Dot 이었는데  -> 수정
     if (dot.DotType === 1) { // Down
       if (this.d.section !== dot.section || this.d.owner !== dot.owner  || this.d.note !== dot.note || this.d.page !== dot.page ) {
         if (this.pageCallback) this.pageCallback(dot)
