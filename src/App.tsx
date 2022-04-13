@@ -1,15 +1,13 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from './component/Home';
+import Main from './component/Main';
 
 const App = () => {
   return (
     <div>
-      {/* <Provider store={store}> */}
-        <Routes>
-          <Route path='/' element={<Home />} />
-        </Routes>
-      {/* </Provider> */}
+      <Routes>
+        <Route path='/' element={<Main />} />
+      </Routes>
     </div>
   );
 };

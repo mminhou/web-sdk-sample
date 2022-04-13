@@ -16,7 +16,7 @@ const useStyle = makeStyles((theme) => ({
   }
 }));
 
-const Home = () => {
+const Main = () => {
   const classes = useStyle();
   
   return (
@@ -32,4 +32,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Main;
