@@ -15,8 +15,9 @@ class PenHelper {
     this.pageCallback = null
     this.messageCallback = null;
     this.d = {section:0, owner:0, note:0, page: 0}
-    this.dotStroage = {}
+    this.dotStorage = {}
     this.mac = ""
+    this.dotArray = []
   }
 
   isConnected = () => {
@@ -28,7 +29,7 @@ class PenHelper {
     let mac = controller.info.MacAddress
     this.mac = mac
     let dot = args;
-    console.log(args) // 기존에 args.Dot 이었는데  -> 수정
+    // console.log(args) // 기존에 args.Dot 이었는데  -> 수정
     if (dot.DotType === 1) { // Down
       if (this.d.section !== dot.section || this.d.owner !== dot.owner  || this.d.note !== dot.note || this.d.page !== dot.page ) {
         if (this.pageCallback) this.pageCallback(dot)
@@ -39,17 +40,20 @@ class PenHelper {
     } else if (dot.DotType === 2) { // Move
 
     } else if (dot.DotType === 3) { // Up
-
+      
     }
     if (this.dotCallback) {
       this.dotCallback(mac, dot);
     } else {
       let id = dot.section + "_" + dot.owner + "_" + dot.note + "_" + dot.page
-      if (this.dotStroage[id]) {
-        this.dotStroage[id].push(dot)
+      if (this.dotStorage[id]) {
+        this.dotStorage[id].push(dot)
+        this.dotArray.push(dot);
       }else{
-        this.dotStroage[id] = []
-        this.dotStroage[id].push(dot)
+        this.dotStorage[id] = []
+        this.dotStorage[id].push(dot)
+        this.dotArray = [];
+        this.dotArray.push(dot);
       }
     }
   };
@@ -98,7 +102,7 @@ class PenHelper {
     }
     return false;
   };
-  
+
   connectDevice = async (device) => {
     if (!device) return;
     console.log("Connect start", device);
@@ -111,6 +115,7 @@ class PenHelper {
       console.log("err conect", err);
     }
   };
+
   serviceBinding_16 = async (service, device) => {
     try {
       const service_16 = await service.getPrimaryService(serviceUuid);
