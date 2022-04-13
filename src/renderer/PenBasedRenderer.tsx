@@ -9,19 +9,12 @@ const useStyle = makeStyles(() => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    textAlign: 'center'
   },
 }));
 
-// PenHelper.pageCallback = (dot) => {
-//   console.log("pageCallback", dot);
-//   PenHelper.dotCallback = (mac, dot) => {
-//     console.log(dot);
-//   }
-// };
-
 const PenBasedRenderer = () => {
   const classes = useStyle();
-  const [dotArray, setDotArray] = useState([]);
   const [canvasFb, setCanvasFb] = useState<fabric.Canvas>(null);
   const [ctx, setCtx] = useState(null);
 
@@ -31,23 +24,34 @@ const PenBasedRenderer = () => {
 
   useEffect(() => {
     PenHelper.dotCallback = (mac, dot) => {
+      setCtx(canvasFb.getContext());
       strokeProcess(dot);
     }
   });
 
   const initCanvas = () => { 
-    return new fabric.Canvas('sampleCanvas'); 
+    return new fabric.Canvas('sampleCanvas', {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }); 
   }
 
   const strokeProcess = (dot) => {
-    let ctx = canvasFb.getContext();
-    ctx.lineTo(dot.x * 5, dot.y * 5);
-    ctx.stroke();
-    ctx.closePath();
-    ctx.beginPath();
-    ctx.moveTo(dot.x * 5, dot.y * 5);
-    // path.set({ left: 120, top: 120 });
-
+    if (dot.dotType === 0) {
+      ctx.beginPath();
+    } else if (dot.dotType === 1) {
+      if (dot.x > 1000 || dot.y > 1000) {
+        return
+      }
+      ctx.lineWidth = 2;
+      ctx.lineTo(dot.x * 10, dot.y * 10);
+      ctx.stroke();
+      ctx.closePath();
+      ctx.beginPath();
+      ctx.moveTo(dot.x * 10, dot.y * 10);
+    } else {
+      ctx.closePath();
+    }
   }
 
   return (
