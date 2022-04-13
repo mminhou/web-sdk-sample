@@ -40,7 +40,7 @@ module.exports = {
   ],
   mode: 'development',
   devServer: {
-    port: 9000,
+    port: 3000,
     hot: true,
   },
 }
