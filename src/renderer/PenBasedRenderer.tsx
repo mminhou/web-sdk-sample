@@ -29,6 +29,7 @@ const PenBasedRenderer = () => {
     }
   });
 
+  // Initialize Canvas
   const initCanvas = () => { 
     return new fabric.Canvas('sampleCanvas', {
       width: window.innerWidth,
@@ -37,9 +38,10 @@ const PenBasedRenderer = () => {
   }
 
   const strokeProcess = (dot) => {
+    // Pen Down
     if (dot.dotType === 0) {
       ctx.beginPath();
-    } else if (dot.dotType === 1) {
+    } else if (dot.dotType === 1) { // Pen Move
       if (dot.x > 1000 || dot.y > 1000) {
         return
       }
@@ -49,7 +51,7 @@ const PenBasedRenderer = () => {
       ctx.closePath();
       ctx.beginPath();
       ctx.moveTo(dot.x * 10, dot.y * 10);
-    } else {
+    } else {  // Pen Up
       ctx.closePath();
     }
   }
