@@ -38,3 +38,19 @@ useEffect(() => {
 // Draw stroke using dot data
 
 ```
+
+## Debug Settings
+```typescript
+// webpack.config.js
+devtool: 'cheap-module-source-map',
+
+// vscode launch.json
+"sourceMap": true,
+"trace": true,
+
+// package.json
+"dev": "webpack-dev-server --host 0.0.0.0 --config ./webpack.config.js",
+
+// Dev run
+$ npm run dev
+```
