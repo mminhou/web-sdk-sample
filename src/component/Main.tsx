@@ -1,7 +1,7 @@
-import { AppBar,makeStyles, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
-import ConnectButton from '../buttons/ConnectButton';
 import PenBasedRenderer from '../renderer/PenBasedRenderer';
+import Header from './Header';
 
 const useStyle = makeStyles((theme) => ({
   mainBackground: {
@@ -21,12 +21,7 @@ const Main = () => {
   
   return (
     <div className={classes.mainBackground}>
-      <AppBar position='relative' color='transparent' elevation={0}>
-        <Typography variant="h5" className={classes.title}>
-          WEB SDK SAMPLE
-        </Typography>
-      </AppBar>
-      <ConnectButton />
+      <Header />
       <PenBasedRenderer />
     </div>
   );
