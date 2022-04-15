@@ -25,7 +25,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|ico)$/i,
+        test: /\.(png|ico|nproj)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -56,5 +56,11 @@ module.exports = {
   devServer: {
     port: 3000,
     hot: true,
+    proxy: {
+      "/api": { 
+        target: "http://nbs.neolab.net/v1/notebooks", 
+        pathRewrite: {"/api": "/"},
+      }
+    }
   },
 }
