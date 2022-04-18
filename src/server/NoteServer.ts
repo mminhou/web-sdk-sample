@@ -1,5 +1,6 @@
 import { PageInfo } from '../utils/type';
 import data from './note_308/note_308.nproj';
+import imageSrc from '../server/note_308/3_27_308_15.jpg';
 
 // Ncode Formula
 const NCODE_SIZE_IN_INCH = 8 * 7 / 600;
@@ -75,9 +76,29 @@ const extractMarginInfo = (pageInfo: PageInfo) => {
   return { Xmin, Xmax, Ymin, Ymax }
 }
 
+
+/**
+ * GET note image function
+ */
+const getNoteImage = (pageInfo: PageInfo) => {
+  return imageSrc
+}
+
+const getNoteSize = (pageInfo: PageInfo) => {
+  const image = new Image();
+  image.src = imageSrc;
+  image.onload = () => {
+    console.log(image.width);
+    console.log(image.height);
+  }
+  return { width: 1182, height: 1616 }
+}
+
 const api = {
   fetchData,
   extractMarginInfo,
+  getNoteImage,
+  getNoteSize,
 }
 
 export default api;
