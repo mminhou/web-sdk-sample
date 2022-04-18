@@ -1,5 +1,7 @@
+import { PageInfo } from '../utils/type';
 import data from './note_308/note_308.nproj';
 
+// Ncode Formula
 const NCODE_SIZE_IN_INCH = 8 * 7 / 600;
 const POINT_72DPI_SIZE_IN_INCH = 1 / 72;
 
@@ -29,7 +31,7 @@ const fetchData = (xmlData) => {
  * Calculate page margin info 
  * -> define X(min/max), Y(min,max)
  */
-const extractMarginInfo = () => {
+const extractMarginInfo = (pageInfo: PageInfo) => {
   const xmlRaw = fetchData(xhttp);
   if (!xmlRaw) return
 
@@ -41,7 +43,7 @@ const extractMarginInfo = () => {
   const section = xmlDoc.children[0].getElementsByTagName('section')[0]?.innerHTML;
   const owner = xmlDoc.children[0].getElementsByTagName('owner')[0]?.innerHTML;
   const book = xmlDoc.children[0].getElementsByTagName('code')[0]?.innerHTML;
-  const page = 10;
+  const page = pageInfo.page;
   console.log(`Target SOBP: ${section}(section) ${owner}(owner) ${book}(book) ${page}(page)`);
 
   // Specify page item
@@ -70,7 +72,7 @@ const extractMarginInfo = () => {
   const Xmax = point72ToNcode(x2) - point72ToNcode(r);
   const Ymax = point72ToNcode(y2) - point72ToNcode(b);
 
-  console.log(Xmin, Xmax, Ymin, Ymax);
+  return { Xmin, Xmax, Ymin, Ymax }
 }
 
 const api = {
