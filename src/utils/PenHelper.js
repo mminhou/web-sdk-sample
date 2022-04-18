@@ -154,6 +154,9 @@ class PenHelper {
       controller.putData(a)
     });
     controller.OnConnected()
+    // const bufferArray = new Uint8Array([0xc0, 0x05, 0x02, 0x00, 0x06, 1, 0xc1]);
+    // controller.putData(bufferArray);
+
     // Write Set
     controller.addWrite( (data) => {
       write
@@ -163,6 +166,8 @@ class PenHelper {
       })
       .catch((err) => console.log("write Error", err));
     })
+    controller.SetHoverEnable(true);
+
     // Call back Event Set
     controller.addCallback(this.handleDot, this.handleMessage);
     // device Status Set
