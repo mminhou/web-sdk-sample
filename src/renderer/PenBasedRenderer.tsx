@@ -7,12 +7,11 @@ import { PageInfo } from '../utils/type';
 
 const useStyle = makeStyles(() => ({
   mainBackground: {
-    width: '100%',
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    textAlign: 'center'
-  },
+    textAlign: 'center',
+    alignItems: 'center',
+  }
 }));
 
 const PenBasedRenderer = () => {
