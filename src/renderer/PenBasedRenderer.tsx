@@ -29,7 +29,7 @@ const PenBasedRenderer = () => {
   const [ncodeHeight, setNcodeHeight] = useState(0); 
 
   const [paperBase, setPaperBase] = useState<PaperBase>({Xmin: 0, Ymin: 0});
-
+  
   // canvas size
   useEffect(() => {
     setCanvasFb(initCanvas());
@@ -83,8 +83,7 @@ const PenBasedRenderer = () => {
   }, [noteWidth, noteHeight]);
  
   useEffect(() => {
-    PenHelper.dotCallback = (mac, dot) => {
-      setCtx(canvasFb.getContext());
+    PenHelper.dotCallback = async (mac, dot) => {
       strokeProcess(dot);
     }
   });
@@ -92,7 +91,7 @@ const PenBasedRenderer = () => {
   // Initialize Canvas
   const initCanvas = () => { 
     const canvas = new fabric.Canvas('sampleCanvas');
-  
+    setCtx(canvas.getContext());
     return canvas
   }
 
@@ -114,26 +113,58 @@ const PenBasedRenderer = () => {
     const dy = ((dot.y - paperBase.Ymin) * canvasFb.height) / ncodeHeight;
 
     // Pen Down
-    if (dot.dotType === 0) {
-      ctx.beginPath();
-    } else if (dot.dotType === 1) { // Pen Move
-      if (dot.x > 1000 || dot.y > 1000) {
-        return
+    try {
+      if (dot.dotType === 0) {
+          ctx.beginPath();
+      } else if (dot.dotType === 1) { // Pen Move
+        if (dot.x > 1000 || dot.y > 1000) {
+          return
+        }
+        ctx.lineWidth = 2;
+        ctx.lineTo(dx, dy);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.beginPath();
+        ctx.moveTo(dx, dy);
+      } else {  // Pen Up
+        ctx.closePath();
       }
-      ctx.lineWidth = 2;
-      ctx.lineTo(dx, dy);
-      ctx.stroke();
-      ctx.closePath();
-      ctx.beginPath();
-      ctx.moveTo(dx, dy);
-    } else {  // Pen Up
-      ctx.closePath();
+    } catch {
+      console.log('ctx : ' + ctx);
     }
+  }
+  
+  const setCanvasWidth = (width) => {
+    canvasFb.setWidth(width);
+  }
+
+  const setCanvasHeight = (height) => {
+    canvasFb.setHeight(height);
   }
 
   return (
     <div className={classes.mainBackground}>
-      <canvas id="sampleCanvas" width={window.innerWidth} height={window.innerHeight-81}></canvas>
+      <div>
+        <label>Width: </label>
+        <input
+          id="width-input"
+          type="number"
+          disabled={false}
+          onChange={(e) => setCanvasWidth(parseInt(e.target.value))}
+        />
+      </div>
+      <div>
+        <label>Height: </label>
+        <input
+          id="height-input"
+          type="number"
+          disabled={false}
+          onChange={(e) => setCanvasHeight(parseInt(e.target.value))}
+        />
+      </div>
+      <div>
+        <canvas id="sampleCanvas" width={window.innerWidth} height={window.innerHeight-81}></canvas>
+      </div>
     </div>
   );
 };
