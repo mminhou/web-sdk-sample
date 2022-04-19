@@ -11,12 +11,17 @@ const useStyle = makeStyles(() => ({
     flexDirection: 'column',
     textAlign: 'center',
     alignItems: 'center',
+    position: 'relative',
+  },
+  hoverCanvasContainer: {
+    position: 'absolute',
   }
 }));
 
 const PenBasedRenderer = () => {
   const classes = useStyle();
   const [canvasFb, setCanvasFb] = useState<any>();
+  const [hoverCanvasFb, setHoverCanvasFb] = useState<any>();
   const [ctx, setCtx] = useState<any>();
 
   const [pageInfo, setPageInfo] = useState<PageInfo>();
@@ -29,10 +34,14 @@ const PenBasedRenderer = () => {
   const [ncodeHeight, setNcodeHeight] = useState(0); 
 
   const [paperBase, setPaperBase] = useState<PaperBase>({Xmin: 0, Ymin: 0});
+
+  const [hoverPoint, setHoverPoint] = useState(undefined);
   
   // canvas size
   useEffect(() => {
-    setCanvasFb(initCanvas());
+    const { canvas, hoverCanvas } = initCanvas();
+    setCanvasFb(canvas);
+    setHoverCanvasFb(hoverCanvas);
   }, []);
 
   useEffect(() => {
@@ -61,6 +70,12 @@ const PenBasedRenderer = () => {
   }, [pageInfo]);
 
   useEffect(() => {
+    if (hoverCanvasFb) {
+      createHoverPoint();
+    }
+  }, [hoverCanvasFb]);
+
+  useEffect(() => {
     if (noteImage) {
       /**
        * Canvas width 재설정
@@ -69,6 +84,7 @@ const PenBasedRenderer = () => {
        */
       const refactorCanvasWidth = canvasFb.height * noteWidth / noteHeight;
       canvasFb.setWidth(refactorCanvasWidth);
+      hoverCanvasFb.setWidth(refactorCanvasWidth);
 
       // CanvasFb noteImage에 맞춘 scaling 작업
       canvasFb.setBackgroundImage(noteImage, canvasFb.renderAll.bind(canvasFb), {
@@ -91,8 +107,11 @@ const PenBasedRenderer = () => {
   // Initialize Canvas
   const initCanvas = () => { 
     const canvas = new fabric.Canvas('sampleCanvas');
+    const hoverCanvas = new fabric.Canvas('hoverCanvas');
+
     setCtx(canvas.getContext());
-    return canvas
+
+    return { canvas, hoverCanvas }
   }
 
   const strokeProcess = (dot) => {
@@ -112,9 +131,8 @@ const PenBasedRenderer = () => {
     const dx = ((dot.x - paperBase.Xmin) * canvasFb.width) / ncodeWidth;
     const dy = ((dot.y - paperBase.Ymin) * canvasFb.height) / ncodeHeight;
 
-    // Pen Down
     try {
-      if (dot.dotType === 0) {
+      if (dot.dotType === 0) { // Pen Down
           ctx.beginPath();
       } else if (dot.dotType === 1) { // Pen Move
         if (dot.x > 1000 || dot.y > 1000) {
@@ -126,8 +144,10 @@ const PenBasedRenderer = () => {
         ctx.closePath();
         ctx.beginPath();
         ctx.moveTo(dx, dy);
-      } else {  // Pen Up
+      } else if (dot.dotType === 2) {  // Pen Up
         ctx.closePath();
+      } else if (dot.dotType === 3) {
+        hoverProcess(dx, dy);
       }
     } catch {
       console.log('ctx : ' + ctx);
@@ -142,28 +162,30 @@ const PenBasedRenderer = () => {
     canvasFb.setHeight(height);
   }
 
+  const hoverProcess = (dx, dy) => {
+    hoverPoint.set({ left: dx, top: dy, opacity: 0.5 });
+    hoverCanvasFb.requestRenderAll();
+  }
+
+  const createHoverPoint = () => {
+    const hoverPoint = new fabric.Circle({ 
+      radius: 10, 
+      fill: '#ff2222',
+      stroke: '#ff2222',
+      opacity: 0,
+      top: 0, 
+      left: 0,
+    });
+    
+    setHoverPoint(hoverPoint);
+    hoverCanvasFb.add(hoverPoint);
+  }
+
   return (
     <div className={classes.mainBackground}>
-      <div>
-        <label>Width: </label>
-        <input
-          id="width-input"
-          type="number"
-          disabled={false}
-          onChange={(e) => setCanvasWidth(parseInt(e.target.value))}
-        />
-      </div>
-      <div>
-        <label>Height: </label>
-        <input
-          id="height-input"
-          type="number"
-          disabled={false}
-          onChange={(e) => setCanvasHeight(parseInt(e.target.value))}
-        />
-      </div>
-      <div>
-        <canvas id="sampleCanvas" width={window.innerWidth} height={window.innerHeight-81}></canvas>
+      <canvas id="sampleCanvas" width={window.innerWidth} height={window.innerHeight-81} style={{zIndex: 0, position: 'absolute'}}></canvas>
+      <div className={classes.hoverCanvasContainer}>
+        <canvas id="hoverCanvas" width={window.innerWidth} height={window.innerHeight-81} style={{zIndex: 1, position: 'absolute'}}></canvas>
       </div>
     </div>
   );
