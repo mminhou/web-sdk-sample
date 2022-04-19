@@ -43,15 +43,26 @@ useEffect(() => {
 ```typescript
 // PenController.js
 PenController.prototype.SetHoverEnable = function (enable) {
-    var _this = this;
-    this.Request(function () { return _this.mClientV1.SetHoverEnable(enable); }, function () { return _this.mClientV2.ReqSetupHoverMode(enable); });
+  var _this = this;
+  this.Request(function () { return _this.mClientV1.SetHoverEnable(enable); }, function () { return _this.mClientV2.ReqSetupHoverMode(enable); });
 };
 
 
 // PenHelper.js
 characteristicBinding = (read, write, device) => {    
   ... // after write 
-    controller.SetHoverEnable(true);
+  controller.SetHoverEnable(true);
+  ...
+};
+
+
+// PenClientParserV2.js - line 500
+* before
+if (this.penSettingInfo.HoverMode && !this.state.IsStartWithDown && this.state.IsStartWithPaperInfo) {
+  ...
+}
+* after
+if (this.penSettingInfo.HoverMode && !this.state.IsStartWithDown) {
   ...
 }
 ```
