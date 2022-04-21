@@ -91,6 +91,7 @@
         <page_item number="44" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="45" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="46" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
+        <page_item number="70" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="47" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="48" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="49" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
@@ -114,7 +115,6 @@
         <page_item number="67" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="68" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="69" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
-        <page_item number="70" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
         <page_item number="71" rotate_angle="0" x1="0" y1="0" x2="579.921" y2="775.512" crop_margin="23.5039,23.504,23.504,23.504" bg_disabled="false" page_type="0"/>
     </pages>
     <action_table>
