@@ -1,18 +1,20 @@
 import { PageInfo } from '../utils/type';
-import data from './note_308/note_308.nproj';
-import imageSrc from '../server/note_308/3_27_308_15.jpg';
+import digitalNoteNproj from './note_3_27_308/note_308.nproj';
+import digitalNoteImage from '../note_3_27_308/3_27_308_15.jpg';
+import plateNproj from './note_3_1013_2/note_2.nproj';
+import plateImage from './note_3_1013_2/3_1013_2_2.jpg';
 
 // Ncode Formula
 const NCODE_SIZE_IN_INCH = 8 * 7 / 600;
 const POINT_72DPI_SIZE_IN_INCH = 1 / 72;
 
-const point72ToNcode = (p) => {
+const point72ToNcode = (p: number) => {
   const ratio = NCODE_SIZE_IN_INCH / POINT_72DPI_SIZE_IN_INCH;
   return p / ratio;
 }
 
 /**
- * For local xml file -> DRF cors 셋팅 후에 axios로 호출하면 될 듯
+ * GET local xml file
  */
 const xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
@@ -20,7 +22,7 @@ xhttp.onreadystatechange = function() {
     fetchData(xhttp);
   }
 };
-xhttp.open('GET', data, true);
+xhttp.open('GET', plateNproj, true);
 xhttp.send();
 
 const fetchData = (xmlData) => {
@@ -34,11 +36,11 @@ const fetchData = (xmlData) => {
  */
 const extractMarginInfo = (pageInfo: PageInfo) => {
   const xmlRaw = fetchData(xhttp);
-  if (!xmlRaw) return
+  if (!xmlRaw) return;
 
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlRaw, 'text/xml');
-  console.log(xmlDoc);
+  // console.log(xmlDoc);
 
   // SOBP
   const section = xmlDoc.children[0].getElementsByTagName('section')[0]?.innerHTML;
@@ -48,7 +50,7 @@ const extractMarginInfo = (pageInfo: PageInfo) => {
   console.log(`Target SOBP: ${section}(section) ${owner}(owner) ${book}(book) ${page}(page)`);
 
   // Specify page item
-  const page_item = xmlDoc.children[0].getElementsByTagName('page_item')[10];
+  const page_item = xmlDoc.children[0].getElementsByTagName('page_item')[page];
 
   let x1, x2, y1, y2, crop_margin, l, t, r, b;
 
@@ -73,7 +75,7 @@ const extractMarginInfo = (pageInfo: PageInfo) => {
   const Xmax = point72ToNcode(x2) - point72ToNcode(r);
   const Ymax = point72ToNcode(y2) - point72ToNcode(b);
 
-  return { Xmin, Xmax, Ymin, Ymax }
+  return { Xmin, Xmax, Ymin, Ymax };
 }
 
 
@@ -81,17 +83,23 @@ const extractMarginInfo = (pageInfo: PageInfo) => {
  * GET note image function
  */
 const getNoteImage = (pageInfo: PageInfo) => {
-  return imageSrc
+  // const { section, owner, book, page } = pageInfo;
+  // const imgSrc = `../server/note_308/${section}_${owner}_${book}_${page}.jpg`
+  return plateImage;
 }
 
 const getNoteSize = (pageInfo: PageInfo) => {
   const image = new Image();
-  image.src = imageSrc;
+  image.src = getNoteImage(pageInfo);
+
+  // image.onload = () => handleImageLoad(image.width, image.height);
   image.onload = () => {
-    console.log(image.width);
-    console.log(image.height);
+    return { width: image.width, height: image.height};
   }
-  return { width: 1182, height: 1616 }
+
+  // return { width: 1182, height: 1616 };  // Note 308 size
+  // return { width: 1072, height: 800 }; // 부기보드 image size
+  return { width: 1280, height: 714 }; // plate2 image size
 }
 
 const api = {
