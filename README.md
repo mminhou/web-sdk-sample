@@ -35,8 +35,11 @@ useEffect(() => {
 
 ### Step3: Draw on Canvas with SmartPen
 ```typescript
-// Draw stroke using dot data
+// Coordinate Transformation with ncode_dot based on view_size
+const pdfDot = PenHelper.ncodeToPdf(dot, { width: canvasFb.width, height: canvasFb.height });
 
+// Create path data using pdfDot
+const path = new Path(pdfDot.x, pdfDot.y);
 ```
 
 ### Step4: Hover mode setting
@@ -82,4 +85,14 @@ devtool: 'cheap-module-source-map',
 
 // Dev run
 $ npm run dev
+```
+
+## Additional settings (to use PenHelper2.ts)
+```typescript
+// add 'device: any' in Class PenController
+export default class PenController {
+  ...
+  device: any;
+  ...
+}
 ```
