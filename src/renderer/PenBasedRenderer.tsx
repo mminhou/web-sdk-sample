@@ -123,9 +123,9 @@ const PenBasedRenderer = () => {
     const view = { width: canvasFb.width, height: canvasFb.height };
     let pdfDot: PdfDot;
     if (PenHelper.isSamePage(dot.pageInfo, PlateNcode_3)) {
-      pdfDot = PenHelper.ncodeToPdf_smartPlate(dot, view, angle);
+      pdfDot = PenHelper.ncodeToScreen_smartPlate(dot, view, angle);
     } else {
-      pdfDot = PenHelper.ncodeToPdf(dot, view);
+      pdfDot = PenHelper.ncodeToScreen(dot, view);
     }
 
     try {

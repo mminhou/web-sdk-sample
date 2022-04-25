@@ -237,7 +237,7 @@ class PenHelper {
     return true;
   }
 
-  ncodeToPdf = (dot: Dot, view: View) => {
+  ncodeToScreen = (dot: Dot, view: View) => {
     const pageInfo = dot.pageInfo;
 
     let ncodeSize;
@@ -285,7 +285,7 @@ class PenHelper {
    * 90', 270' -> portrait
    * 
    */
-  ncodeToPdf_smartPlate = (dot: Dot, view: View, angle: number) => {
+  ncodeToScreen_smartPlate = (dot: Dot, view: View, angle: number) => {
     const pageInfo = dot.pageInfo;
 
     let ncodeSize;
