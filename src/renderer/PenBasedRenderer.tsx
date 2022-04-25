@@ -1,9 +1,10 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, TextField } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import PenHelper from '../utils/PenHelper2';
 import { fabric } from 'fabric';
 import api from '../server/NoteServer';
 import { Dot, PageInfo, PdfDot } from '../utils/type';
+import { PlateNcode_3 } from '../utils/constants';
 
 const useStyle = makeStyles(() => ({
   mainBackground: {
@@ -45,6 +46,8 @@ const PenBasedRenderer = () => {
   const [noteHeight, setNoteHeight] = useState<number>(0);
 
   const [hoverPoint, setHoverPoint] = useState<any>();
+
+  const [angle, setAngle] = useState<number>(0);
   
   // canvas size
   useEffect(() => {
@@ -93,7 +96,7 @@ const PenBasedRenderer = () => {
         scaleY: canvasFb.height / noteHeight,
       });
     }
-  }, [canvasFb, noteImage]);
+  }, [canvasFb, noteImage, angle]);
  
   useEffect(() => {
     PenHelper.dotCallback = async (mac, dot) => {
@@ -117,7 +120,13 @@ const PenBasedRenderer = () => {
     }
 
     // 먼저, ncode_dot을 view(Canvas) size 에 맞춰 좌표값을 변환시켜준다.
-    const pdfDot = PenHelper.ncodeToPdf(dot, { width: canvasFb.width, height: canvasFb.height });
+    const view = { width: canvasFb.width, height: canvasFb.height };
+    let pdfDot: PdfDot;
+    if (PenHelper.isSamePage(dot.pageInfo, PlateNcode_3)) {
+      pdfDot = PenHelper.ncodeToPdf_smartPlate(dot, view, angle);
+    } else {
+      pdfDot = PenHelper.ncodeToPdf(dot, view);
+    }
 
     try {
       if (dot.dotType === 0) { // Pen Down
@@ -146,6 +155,16 @@ const PenBasedRenderer = () => {
     }
   }
 
+  const setCanvasAngle = (rotate: number) => {
+    if (![0, 90, 180, 270].includes(rotate)) return
+
+    if (Math.abs(angle-rotate)/90 === 1 || Math.abs(angle-rotate)/90 === 3) {
+      const tmp = noteWidth;
+      setNoteWidth(noteHeight);
+      setNoteHeight(tmp); 
+    }
+    setAngle(rotate);
+  }
 
   // hoverPoint를 이동시키기 위한 로직
   const hoverProcess = (pdfDot: PdfDot) => {
@@ -172,6 +191,12 @@ const PenBasedRenderer = () => {
       <canvas id="mainCanvas" className={classes.mainCanvas} width={window.innerWidth} height={window.innerHeight-81}></canvas>
       <div className={classes.hoverCanvasContainer}>
         <canvas id="hoverCanvas" className={classes.hoverCanvas} width={window.innerWidth} height={window.innerHeight-81}></canvas>
+      </div>
+      <div className={classes.inputContainer}>
+        <div className={classes.inputStyle}>
+          <TextField id="angle" label="Angle" variant="outlined" type="number" size="small"
+              onChange={(e) => setCanvasAngle(parseInt(e.target.value))} />
+        </div>
       </div>
     </div>
   );
