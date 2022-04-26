@@ -60,10 +60,11 @@ const PenBasedRenderer = () => {
     if (pageInfo) {
       // Note Info
       const imageSrc = api.getNoteImage(pageInfo);
-      const { width, height } = api.getNoteSize(pageInfo);
-      setNoteImage(imageSrc);
-      setNoteWidth(width);
-      setNoteHeight(height); 
+      api.getNoteSize(pageInfo, function(result) {
+        setNoteWidth(result.width);
+        setNoteHeight(result.height);
+        setNoteImage(imageSrc);
+      });
     }
   }, [pageInfo]);
 

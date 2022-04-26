@@ -1,8 +1,10 @@
 import { PageInfo } from '../utils/type';
 import digitalNoteNproj from './note_3_27_308/note_308.nproj';
-import digitalNoteImage from '../note_3_27_308/3_27_308_15.jpg';
+import digitalNoteImage from './note_3_27_308/3_27_308_15.jpg';
 import plateNproj from './note_3_1013_2/note_2.nproj';
 import plateImage from './note_3_1013_2/3_1013_2_2.jpg';
+import smartPlateLandscapeImage from './note_3_1013_2/3_1013_2_16_landscape.jpg';
+import smartPlatePortraitImage from './note_3_1013_2/3_1013_2_16_portrait.jpg';
 
 // Ncode Formula
 const NCODE_SIZE_IN_INCH = 8 * 7 / 600;
@@ -28,7 +30,6 @@ xhttp.send();
 const fetchData = (xmlData) => {
   return xmlData.responseText;
 }
-
 
 /**
  * Calculate page margin info 
@@ -88,18 +89,13 @@ const getNoteImage = (pageInfo: PageInfo) => {
   return plateImage;
 }
 
-const getNoteSize = (pageInfo: PageInfo) => {
+const getNoteSize = (pageInfo: PageInfo, callback) => {
   const image = new Image();
   image.src = getNoteImage(pageInfo);
-
-  // image.onload = () => handleImageLoad(image.width, image.height);
-  image.onload = () => {
-    return { width: image.width, height: image.height};
+  image.onload = function() {
+    const result = { width: image.width, height: image.height };
+    callback(result);
   }
-
-  // return { width: 1182, height: 1616 };  // Note 308 size
-  // return { width: 1072, height: 800 }; // 부기보드 image size
-  return { width: 1280, height: 714 }; // plate2 image size
 }
 
 const api = {
